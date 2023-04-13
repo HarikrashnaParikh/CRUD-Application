@@ -1,19 +1,27 @@
 package com.harikrashna.contactdirectory.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.hibernate.annotations.GenericGenerator;
+
+import java.util.List;
 
 @Entity
 @Table(name = "users")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GenericGenerator(name = "native_generator", strategy = "native")
+    @GeneratedValue(generator = "native_generator")
     private long id;
     @Column(name = "name")
     private String name;
     @Column(name = "occupation")
     private String occupation;
-    @Column(name = "emailId")
+    @Column(name = "email_id")
     private String emailId;
+//    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
+    private List<Mobile>  mobiles;
 
     public User(){
 
@@ -58,6 +66,14 @@ public class User {
         this.emailId = emailId;
     }
 
+    public List<Mobile> getMobiles() {
+        return mobiles;
+    }
+
+    public void setMobiles(List<Mobile> mobiles) {
+        this.mobiles = mobiles;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -65,6 +81,7 @@ public class User {
                 ", name='" + name + '\'' +
                 ", occupation='" + occupation + '\'' +
                 ", emailId='" + emailId + '\'' +
+                ", mobiles=" + mobiles +
                 '}';
     }
 }

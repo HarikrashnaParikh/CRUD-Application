@@ -19,9 +19,16 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private MobileController mobileController;
+
     //get all user
     @GetMapping("/users")
     public List<User> getAllUsers(){
+//        long  id = 1;
+//        System.out.println("user here");
+//        System.out.println(userRepository.findById(id));
+        System.out.println("Reached here");
         return userRepository.findAll();
     }
 
@@ -29,9 +36,6 @@ public class UserController {
     // add/create user rest api
     @PostMapping("/users")
     public User createUser(@RequestBody User user) {
-        System.out.println(user);
-
-//        userRepository.
         return userRepository.save(user);
     }
 
