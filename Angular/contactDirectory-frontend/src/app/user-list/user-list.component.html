@@ -4,6 +4,7 @@
         <tr>
             <th>Name</th>
             <th>Occupation</th>
+            <th>Mobiles</th>
             <th>Email Id</th>
             <th>Actions</th>
         </tr>
@@ -12,6 +13,7 @@
         <tr *ngFor = "let user of users">
             <td>{{user.name}}</td>
             <td>{{user.occupation}}</td>
+            <td>{{user.mobile   | json}}</td>
             <td>{{user.emailId}}</td>
             <td>
                 <button (click)="updateUser(user.id)" class="btn btn-info">Update</button>

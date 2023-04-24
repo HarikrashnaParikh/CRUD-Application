@@ -22,7 +22,7 @@ public class MobileController {
     @Autowired
     private UserRepository userRepository;
 
-    //get all mobiles
+    //get all mobiles   
     @GetMapping("/mobiles")
     public List<Mobile> getAllMobiles() {
         int id = 7;
@@ -34,7 +34,7 @@ public class MobileController {
     }
 
 //    find by Id
-    @GetMapping("/{id}")
+    @GetMapping("mobiles/{id}")
     public ResponseEntity<Mobile> getMobileById(@PathVariable int id) {
         Optional<Mobile> mobile = mobileRepository.findById(id);
         if (mobile.isPresent()) {
@@ -45,20 +45,23 @@ public class MobileController {
     }
 
 
-    //create/add mobile
-    @PostMapping
-    public ResponseEntity<Mobile> createMobile(@RequestBody Mobile mobile) {
-//        System.out.println(mobile);
-        User user = userRepository.findById(mobile.getUserId().getId()).get();
-        mobile.setUserId(user);
-        Mobile savedMobile = mobileRepository.save(mobile);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedMobile);
-    }
+//    //create/add mobile
+//    @PostMapping
+//    public ResponseEntity<Mobile> createMobile(@RequestBody Mobile mobile) {
+//
+//        User user = userRepository.findById(mobile.getUserId().getId()).get();
+//        mobile.setUserId(user);
+//        Mobile savedMobile = mobileRepository.save(mobile);
+//        return ResponseEntity.status(HttpStatus.CREATED).body(savedMobile);
+//    }
 
-    @PutMapping("/{id}")
+    @PutMapping("mobiles/{id}")
     public ResponseEntity<Mobile> updateMobile(@PathVariable int id, @RequestBody Mobile mobile) {
         Optional<Mobile> existingMobile = mobileRepository.findById(id);
+
         if (existingMobile.isPresent()) {
+            User user = userRepository.findById(mobile.getUserId().getId()).get();
+            mobile.setUserId(user);
             mobile.setId(id);
             Mobile savedMobile = mobileRepository.save(mobile);
             return ResponseEntity.ok(savedMobile);
@@ -67,10 +70,11 @@ public class MobileController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("mobiles/{id}")
     public ResponseEntity<Void> deleteMobile(@PathVariable int id) {
         Optional<Mobile> existingMobile = mobileRepository.findById(id);
         if (existingMobile.isPresent()) {
+
             mobileRepository.delete(existingMobile.get());
             return ResponseEntity.noContent().build();
         } else {

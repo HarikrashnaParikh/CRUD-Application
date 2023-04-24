@@ -1,14 +1,17 @@
 package com.harikrashna.contactdirectory.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 
-import java.util.ArrayList;
-
 @Entity
 @Table(name = "mobile")
+@JsonIdentityInfo(
+        scope = Mobile.class,
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Mobile {
     @Id
     @GenericGenerator(name = "native_generator", strategy = "native")
@@ -22,11 +25,10 @@ public class Mobile {
 
     @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH })
     @JoinColumn(name = "user_id")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonBackReference
     private User userId;
 
 
-//    @JsonIgnore
     public User getUserId() {
         return userId;
     }

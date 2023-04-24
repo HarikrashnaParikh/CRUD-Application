@@ -1,13 +1,21 @@
 package com.harikrashna.contactdirectory.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "users")
+@JsonIdentityInfo(
+        scope = User.class,
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class User {
     @Id
     @GenericGenerator(name = "native_generator", strategy = "native")
@@ -19,9 +27,12 @@ public class User {
     private String occupation;
     @Column(name = "email_id")
     private String emailId;
-//    @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
-    private List<Mobile>  mobiles;
+    @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.REMOVE,CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH}, mappedBy = "userId")
+    @JsonManagedReference
+    private List<Mobile>  mobiles = new ArrayList<>();
+
+    //@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    //    private List<Phone> phones = new ArrayList<>();
 
     public User(){
 
@@ -46,7 +57,7 @@ public class User {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName (String name) {
         this.name = name;
     }
 
